@@ -1,0 +1,14 @@
+.simple-dragdrop{
+  &.dragged {
+    opacity: 0.5;
+  }
+
+  &.helper {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &.drop-on {
+    background-color: red;
+  }
+}

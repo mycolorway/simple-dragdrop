@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Dragdrop demo</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles/dragdrop.css"/>
+</head>
+
+<body>
+<style>
+    .box {
+        height: 100px;
+        width: 100px;
+        background: grey;
+    }
+    body {
+        margin: 0;
+    }
+
+    .droparea {
+        border: 1px solid black;
+        height: 200px;
+        width: 200px;
+        float: left;
+        margin: 20px;
+    }
+</style>
+<div class="wrapper">
+    <div class="box">dragme</div>
+</div>
+
+<div class="droparea">
+1
+</div>
+<div class="droparea">
+2
+</div>
+<div class="droparea">
+3
+</div>
+
+<script src="vendor/bower/jquery/dist/jquery.js"></script>
+<script src="vendor/bower/simple-module/lib/module.js"></script>
+<script src="lib/dragdrop.js"></script>
+<script>
+    $(document).ready(function(){
+        var dragdrop = simple.dragdrop({
+            dragEl: '.box',
+            helperRender: function($helper) {
+                $helper.css('height', '50px');
+                $helper.addClass('test');
+            },
+            dropEl: '.droparea'
+        });
+
+        dragdrop.on('dropped', function(e, target){
+            $(target).append($('<div>Dropped on me!</div>'));
+        })
+    })
+</script>
+</body>
+
+</html>
+
+

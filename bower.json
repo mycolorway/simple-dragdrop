@@ -1,0 +1,31 @@
+{
+  "name": "simple-sample",
+  "version": "0.1.0",
+  "homepage": "https://github.com/mycolorway/simple-dragdrop",
+  "authors": [
+    "Lcj <emlcj@gmail.com>"
+  ],
+  "description": "A simple Drag&Drop like components based on Simple Module",
+  "main": "lib/dragdrop.js",
+  "keywords": [
+    "dragdrop"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "spec",
+    "node_modules",
+    "vendor",
+    "Gemfile",
+    "Gemfile.lock",
+    "Gruntfile.coffee",
+    "package.json",
+    "README.md",
+    "umd.hbs"
+  ],
+  "dependencies": {
+    "jquery": "2.x",
+    "simple-module": "2.x"
+  }
+}
+
