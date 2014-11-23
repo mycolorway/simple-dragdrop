@@ -4,15 +4,6 @@ module.exports = (grunt) ->
 
     pkg: grunt.file.readJSON 'package.json'
 
-    sass:
-      styles:
-        options:
-          bundleExec: true
-          style: 'expanded'
-          sourcemap: 'none'
-        files:
-          'styles/dragdrop.css': 'styles/dragdrop.scss'
-
     coffee:
       src:
         options:
@@ -64,13 +55,12 @@ module.exports = (grunt) ->
             'vendor/bower/simple-module/lib/module.js'
           ]
 
-  grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   grunt.loadNpmTasks 'grunt-umd'
 
-  grunt.registerTask 'default', ['sass', 'coffee', 'umd', 'watch']
+  grunt.registerTask 'default', ['coffee', 'umd', 'watch']
 
 
 

@@ -5,7 +5,7 @@
   "authors": [
     "Lcj <emlcj@gmail.com>"
   ],
-  "description": "A simple Drag&Drop like components based on Simple Module",
+  "description": "A simple Drag&Drop like component based on Simple Module",
   "main": "lib/dragdrop.js",
   "keywords": [
     "dragdrop"

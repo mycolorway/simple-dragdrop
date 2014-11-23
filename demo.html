@@ -1,62 +1,119 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple Dragdrop demo</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles/dragdrop.css"/>
+  <title>Simple Dragdrop demo</title>
+  <meta charset="utf-8"/>
 </head>
 
 <body>
 <style>
-    .box {
-        height: 100px;
-        width: 100px;
-        background: grey;
-    }
-    body {
-        margin: 0;
-    }
+  .wrapper {
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid black;
+    overflow: auto;
+  }
+  .box {
+    height: 100px;
+    width: 100px;
+    background: grey;
+  }
 
-    .droparea {
-        border: 1px solid black;
-        height: 200px;
-        width: 200px;
-        float: left;
-        margin: 20px;
-    }
+  body {
+    margin: 10px;
+  }
+
+  .droparea {
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+    float: left;
+    margin-top: 20px;
+    margin-right: 40px;
+  }
+  .droparea:after {
+    clear: both;
+  }
+
+  .drag-on {
+    background: red;
+  }
 </style>
-<div class="wrapper">
-    <div class="box">dragme</div>
+<h1>Simple Dragdrop Demo</h1>
+<div class="wrapper wrapper-1">
+  <h3>Drag with default opts</h3>
+  <div class="box">dragme</div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
 </div>
 
-<div class="droparea">
-1
+<div class="wrapper wrapper-2">
+  <h3>Drag with functional helper</h3>
+  <div class="box">dragme</div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
 </div>
-<div class="droparea">
-2
-</div>
-<div class="droparea">
-3
+
+<div class="wrapper wrapper-3">
+  <h3>Drag with custom DOM</h3>
+  <div class="box">dragme</div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
+  <div class="droparea"></div>
 </div>
 
 <script src="vendor/bower/jquery/dist/jquery.js"></script>
 <script src="vendor/bower/simple-module/lib/module.js"></script>
 <script src="lib/dragdrop.js"></script>
 <script>
-    $(document).ready(function(){
-        var dragdrop = simple.dragdrop({
-            dragEl: '.box',
-            helperRender: function($helper) {
-                $helper.css('height', '50px');
-                $helper.addClass('test');
-            },
-            dropEl: '.droparea'
-        });
+  $(document).ready(function () {
+    var dragdrop1 = simple.dragdrop({
+      el: '.wrapper-1',
+      draggable: '.box',
+      droppable: '.droparea'
+    });
+    dragdrop1.on('drop', function (e, target) {
+      $(target).removeClass('drag-on');
+      $(target).append($('<div>Dropped on me!</div>'));
+    });
+    dragdrop1.on('dragenter', function(e, target) {
+      $(target).addClass('drag-on');
+    });
+    dragdrop1.on('dragleave', function(e, target) {
+      $(target).removeClass('drag-on');
+    });
 
-        dragdrop.on('dropped', function(e, target){
-            $(target).append($('<div>Dropped on me!</div>'));
-        })
-    })
+    var dragdrop2 = simple.dragdrop({
+      el: '.wrapper-2',
+      draggable: '.box',
+      helper: function ($helper) {
+        $helper.css('height', '50px');
+      },
+      placeholder: function($placeholder) {
+        $placeholder.css('background', 'red');
+      },
+      droppable: '.droparea'
+    });
+
+    dragdrop2.on('drop', function (e, target) {
+      $(target).append($('<div>Dropped on me!</div>'));
+    });
+
+    var dragdrop3 = simple.dragdrop({
+      el: '.wrapper-3',
+      draggable: '.box',
+      helper: $('<p>drag helper</p>'),
+      placeholder: $('<p>placeholder</p>'),
+      droppable: '.droparea'
+    });
+
+    dragdrop3.on('drop', function (e, target) {
+      $(target).append($('<div>Dropped on me!</div>'));
+    });
+
+  });
 </script>
 </body>
 

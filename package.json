@@ -1,7 +1,7 @@
 {
   "name": "simple-sample",
   "version": "0.1.0",
-  "description": "A simple Drag&Drop like components based on Simple Module",
+  "description": "A simple Drag&Drop like component based on Simple Module",
   "repository": {
     "type": "git",
     "url": "git@github.com:mycolorway/simple-dragdrop.git"
@@ -16,7 +16,6 @@
     "grunt": "0.x",
     "grunt-contrib-watch": "0.x",
     "grunt-contrib-coffee": "0.x",
-    "grunt-contrib-sass": "0.x",
     "grunt-contrib-jasmine": "0.x",
     "grunt-umd": "2.x"
   }
