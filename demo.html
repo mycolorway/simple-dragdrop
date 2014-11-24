@@ -60,8 +60,6 @@
   <h3>Drag with custom DOM</h3>
   <div class="box">dragme</div>
   <div class="droparea"></div>
-  <div class="droparea"></div>
-  <div class="droparea"></div>
 </div>
 
 <script src="vendor/bower/jquery/dist/jquery.js"></script>
@@ -101,7 +99,8 @@
         $placeholder.css('background', 'red');
         return $placeholder;
       },
-      droppable: '.droparea'
+      droppable: '.droparea',
+      cursorPosition: 'center'
     });
 
     dragdrop2.on('drop', function (e, target) {
@@ -113,7 +112,13 @@
       draggable: '.box',
       helper: $('<p>drag helper</p>'),
       placeholder: $('<p>placeholder</p>'),
-      droppable: '.droparea'
+      droppable: '.droparea',
+      cursorPosition: 'cornor',
+      cursorOffset: {
+        top: -20,
+        left: -20
+      },
+      axis: 'y'
     });
 
     dragdrop3.on('drop', function (e, target) {

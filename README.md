@@ -52,6 +52,18 @@ __placeholder__
 
 可选，开始拖动之后被拖拽元素会隐藏，显示placeholder，可以是Dom/function，如果为空，则是一个空白的占位元素
 
+__cursorPosition__
+
+可选，确定helper的相对于鼠标的位置，默认为'auto'，还可以为'center'（中心）, 'cornor'（左上角）
+
+__cursorOffset__
+
+可选，对helper位置进行微调，需要传入top以及left
+
+__axis__
+
+可选，拖拽的方向，默认为'both', 可以为'x', 'y'
+
 #### 方法
 
 __destroy()__

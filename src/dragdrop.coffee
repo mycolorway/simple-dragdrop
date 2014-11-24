@@ -5,6 +5,12 @@ class Dragdrop extends SimpleModule
     droppable: null
     helper: null
     placeholder: null
+    cursorPosition: 'auto'
+    cursorOffset:
+      top: 0
+      left: 0
+    axis: 'both'
+
 
   _init: ->
     @el = $(@opts.el)
@@ -32,8 +38,8 @@ class Dragdrop extends SimpleModule
 
       @dragging = $(e.currentTarget)
       @_renderHelper()
-      @_renderPlaceholder()
       @_initOptions(e)
+      @_renderPlaceholder()
 
       @.trigger('dragstart.simple-dragdrop', @dragging)
 
@@ -41,10 +47,17 @@ class Dragdrop extends SimpleModule
       $(document).on 'mousemove.simple-dragdrop', (e)=>
         return unless @dragging
         $target = @helper
+
+        top = @originalOffset.top + e.pageY + 'px'
+        left = @originalOffset.left + e.pageX + 'px'
+
+        top = null if @opts.axis is 'x'
+        left = null if @opts.axis is 'y'
+
         $target.css
           visibility: 'visible'
-          top:-@originalOffset.top + e.pageY + 'px'
-          left:-@originalOffset.left + e.pageX + 'px'
+          top: top
+          left: left
         @.trigger('drag.simple-dragdrop', @dragging)
 
       $(document).one 'mouseup.simple-dragdrop', (e) =>
@@ -104,14 +117,25 @@ class Dragdrop extends SimpleModule
     .appendTo 'body'
 
   _initOptions: (e) ->
-    @originalOffset =
-      top: @helper.outerHeight(true)/2
-      left: @helper.outerWidth(true)/2
+    if @opts.cursorPosition is 'center'
+      @originalOffset =
+        top: -@helper.outerHeight(true)/2 + @opts.cursorOffset.top
+        left: -@helper.outerWidth(true)/2 + @opts.cursorOffset.left
+
+    if @opts.cursorPosition is 'cornor'
+      @originalOffset =
+        top: @opts.cursorOffset.top
+        left: @opts.cursorOffset.left
+
+    if @opts.cursorPosition is 'auto'
+      @originalOffset =
+        top: @dragging.offset().top - e.pageY + @opts.cursorOffset.top
+        left: @dragging.offset().left - e.pageX + @opts.cursorOffset.left
 
     @helper.css
       visibility: 'visible'
-      top:-@originalOffset.top + e.pageY + 'px'
-      left:-@originalOffset.left + e.pageX + 'px'
+      top: @originalOffset.top + e.pageY + 'px'
+      left: @originalOffset.left + e.pageX + 'px'
 
 
   _renderPlaceholder: ->
