@@ -88,11 +88,18 @@
     var dragdrop2 = simple.dragdrop({
       el: '.wrapper-2',
       draggable: '.box',
-      helper: function ($helper) {
-        $helper.css('height', '50px');
+      helper: function ($dragging) {
+        $helper = $dragging.clone();
+        $helper.css({
+          background: 'blue',
+          height: '50px'
+        });
+        return $helper;
       },
-      placeholder: function($placeholder) {
+      placeholder: function($dragging) {
+        $placeholder = $dragging.clone();
         $placeholder.css('background', 'red');
+        return $placeholder;
       },
       droppable: '.droparea'
     });
