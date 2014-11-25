@@ -76,10 +76,10 @@
       $(target).removeClass('drag-on');
       $(target).append($('<div>Dropped on me!</div>'));
     });
-    dragdrop1.on('dragenter', function(e, target) {
+    dragdrop1.on('dragenter', function(e, dragging, target) {
       $(target).addClass('drag-on');
     });
-    dragdrop1.on('dragleave', function(e, target) {
+    dragdrop1.on('dragleave', function(e, dragging, target) {
       $(target).removeClass('drag-on');
     });
 

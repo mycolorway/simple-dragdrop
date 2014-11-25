@@ -16,11 +16,11 @@ class Dragdrop extends SimpleModule
     @el = $(@opts.el)
     throw new Error "simple-dragdrop: el option is invalid" if @el.length == 0
 
-    @draggable = @el.find(@opts.draggable)
-    throw new Error "simple-dragdrop: draggable option is invalid" if @draggable.length == 0
-
-    @droppable = @el.find(@opts.droppable)
-    throw new Error "simple-dragdrop: droppable option is invalid" if @droppable.length == 0
+#    @draggable = @el.find(@opts.draggable)
+#    throw new Error "simple-dragdrop: draggable option is invalid" if @draggable.length == 0
+#
+#    @droppable = @el.find(@opts.droppable)
+#    throw new Error "simple-dragdrop: droppable option is invalid" if @droppable.length == 0
 
     @el.data('dragdrop', @)
 
@@ -81,17 +81,17 @@ class Dragdrop extends SimpleModule
       $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
         $target = $(e.currentTarget)
         return unless $target
-        @.trigger('drop', $target, @dragging)
+        @.trigger('drop', [@dragging, $target])
 
       @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
         return unless @dragging
         $target = $(e.currentTarget)
-        @.trigger('dragenter', $target)
+        @.trigger('dragenter', [@dragging, $target])
 
         $target.one 'mouseleave.simple-dragdrop', (e)=>
           return unless @dragging
           $target = $(e.currentTarget)
-          @.trigger('dragleave', $target)
+          @.trigger('dragleave', [@dragging, $target])
 
   _unbind: ->
     @el.off '.simple-dragdrop'
