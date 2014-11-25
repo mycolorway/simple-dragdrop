@@ -48,8 +48,8 @@ class Dragdrop extends SimpleModule
         return unless @dragging
         $target = @helper
 
-        top = @originalOffset.top + e.pageY + 'px'
-        left = @originalOffset.left + e.pageX + 'px'
+        top = @originalOffset.top + e.pageY
+        left = @originalOffset.left + e.pageX
 
         top = null if @opts.axis is 'x'
         left = null if @opts.axis is 'y'
@@ -114,28 +114,35 @@ class Dragdrop extends SimpleModule
       'pointer-events': 'none'
       'visibility': 'hidden'
       'z-index': 100
-    .appendTo 'body'
+    .insertAfter @dragging
 
   _initOptions: (e) ->
     if @opts.cursorPosition is 'center'
       @originalOffset =
-        top: -@helper.outerHeight(true)/2 + @opts.cursorOffset.top
-        left: -@helper.outerWidth(true)/2 + @opts.cursorOffset.left
+        top: -@helper.outerHeight(true)/2 - @dragging.offset().top + @opts.cursorOffset.top
+        left: -@helper.outerWidth(true)/2 - @dragging.offset().left + @opts.cursorOffset.left
 
     if @opts.cursorPosition is 'cornor'
       @originalOffset =
-        top: @opts.cursorOffset.top
-        left: @opts.cursorOffset.left
+        top: - @dragging.offset().top
+        left: - @dragging.offset().left
 
     if @opts.cursorPosition is 'auto'
       @originalOffset =
-        top: @dragging.offset().top - e.pageY + @opts.cursorOffset.top
-        left: @dragging.offset().left - e.pageX + @opts.cursorOffset.left
+        top: -e.pageY + @opts.cursorOffset.top
+        left: -e.pageX + @opts.cursorOffset.left
 
     @helper.css
       visibility: 'visible'
       top: @originalOffset.top + e.pageY + 'px'
       left: @originalOffset.left + e.pageX + 'px'
+
+    @originalOffset.top += @dragging.position().top
+    @originalOffset.left += @dragging.position().left
+
+    @helper.css
+      top: @originalOffset.top + e.pageY
+      left: @originalOffset.left + e.pageX
 
 
   _renderPlaceholder: ->
