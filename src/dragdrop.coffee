@@ -117,17 +117,19 @@ class Dragdrop extends SimpleModule
     .insertAfter @dragging
 
   _initOptions: (e) ->
-    if @opts.cursorPosition is 'center'
+    cursorPosition = @helper.data 'cursorPosition'
+    cursorPosition = @opts.cursorPosition unless cursorPosition
+    if cursorPosition is 'center'
       @originalOffset =
         top: -@helper.outerHeight(true)/2 - @dragging.offset().top + @opts.cursorOffset.top
         left: -@helper.outerWidth(true)/2 - @dragging.offset().left + @opts.cursorOffset.left
 
-    if @opts.cursorPosition is 'cornor'
+    if cursorPosition is 'cornor'
       @originalOffset =
         top: - @dragging.offset().top
         left: - @dragging.offset().left
 
-    if @opts.cursorPosition is 'auto'
+    if cursorPosition is 'auto'
       @originalOffset =
         top: -e.pageY + @opts.cursorOffset.top
         left: -e.pageX + @opts.cursorOffset.left
