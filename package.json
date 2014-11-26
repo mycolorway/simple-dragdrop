@@ -1,6 +1,6 @@
 {
   "name": "simple-sample",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A simple Drag&Drop like component based on Simple Module",
   "repository": {
     "type": "git",
