@@ -34,6 +34,9 @@
   .droparea:after {
     clear: both;
   }
+  .droparea p {
+    margin: 0;
+  }
 
   .drag-on {
     background: red;
@@ -41,90 +44,106 @@
 </style>
 <h1>Simple Dragdrop Demo</h1>
 <div class="wrapper wrapper-1">
-  <h3>Drag with default opts</h3>
+
+  <h4>选项自定义</h4>
+  <p>helper选项
+    <select name="helper" id="helper">
+      <option value="0">空（默认）</option>
+      <option value="1">Dom元素</option>
+      <option value="2">函数</option>
+    </select>
+  </p>
+
+  <p>placeholder选项
+    <select name="placeholder" id="placeholder">
+      <option value="0">空（默认）</option>
+      <option value="1"">Dom元素</option>
+      <option value="2">函数</option>
+    </select>
+  </p>
+
+  <p>cursorPosition选项
+    <select name="cursorPosition" id="cursorPosition">
+      <option value="0">auto</option>
+      <option value="1">corner</option>
+      <option value="2">center</option>
+    </select>
+  </p>
+  <p>cursorOffset选项
+  <p>top: <input type="text" id="top"/></p>
+  <p>left: <input type="text" id="left"/></p>
+  </p>
+  <hr/>
+  <h4>Demo</h4>
+
+
   <div class="box">dragme</div>
   <div class="droparea"></div>
   <div class="droparea"></div>
   <div class="droparea"></div>
 </div>
 
-<div class="wrapper wrapper-2">
-  <h3>Drag with functional helper</h3>
-  <div class="box">dragme</div>
-  <div class="droparea"></div>
-  <div class="droparea"></div>
-  <div class="droparea"></div>
-</div>
-
-<div class="wrapper wrapper-3">
-  <h3>Drag with custom DOM</h3>
-  <div class="box">dragme</div>
-  <div class="droparea"></div>
-</div>
 
 <script src="vendor/bower/jquery/dist/jquery.js"></script>
 <script src="vendor/bower/simple-module/lib/module.js"></script>
 <script src="lib/dragdrop.js"></script>
 <script>
   $(document).ready(function () {
-    var dragdrop1 = simple.dragdrop({
-      el: '.wrapper-1',
-      draggable: '.box',
-      droppable: '.droparea'
+
+    _helper = [null, $('<p>this is a helper</p>'), function(dragging){
+      $helper = $(dragging).clone();
+      $helper.css({
+        background: 'yellow',
+        height: '50px'
     });
-    dragdrop1.on('drop', function (e, target) {
-      $(target).removeClass('drag-on');
-      $(target).append($('<div>Dropped on me!</div>'));
-    });
-    dragdrop1.on('dragenter', function(e, dragging, target) {
-      $(target).addClass('drag-on');
-    });
-    dragdrop1.on('dragleave', function(e, dragging, target) {
-      $(target).removeClass('drag-on');
+      return $helper;
+    }];
+
+    _placeholder = [null, $('<p>this is a placeholder</p>'), function(dragging) {
+      $placeholder = $(dragging).clone();
+      $placeholder.css('background', 'blue');
+      return $placeholder;
+    }];
+
+    _cursorPosition = ['auto', 'corner', 'center'];
+
+    initDragdrop = function() {
+      helper = _helper[$('#helper').val()];
+      placeholder = _placeholder[$('#placeholder').val()];
+      cursorPostion = _cursorPosition[$('#cursorPosition').val()];
+      cursorOffset = {
+        top: $('#top').val() | 0,
+        left: $('#left').val() | 0
+      };
+      option = {
+        el: document,
+        draggable: '.box',
+        droppable: '.droparea',
+        helper: helper,
+        placeholder: placeholder,
+        cursorPosition: cursorPostion,
+        cursorOffset: cursorOffset
+      };
+      dragdrop = simple.dragdrop(option);
+      dragdrop.on('dragenter', function(e, dragging, target){
+        $(target).addClass('drag-on');
+      });
+      dragdrop.on('dragleave', function(e, dragging, target){
+        $(target).removeClass('drag-on');
+      });
+      dragdrop.on('dragend', function(e, dragging){
+        $('.droparea').removeClass('drag-on');
+      });
+      dragdrop.on('drop', function(e, dragging, target){
+        $(target).append($('<p>dropped!</p>'));
+      })
+    };
+
+    $('select, input').change(function(){
+      initDragdrop();
     });
 
-    var dragdrop2 = simple.dragdrop({
-      el: '.wrapper-2',
-      draggable: '.box',
-      helper: function ($dragging) {
-        $helper = $dragging.clone();
-        $helper.css({
-          background: 'blue',
-          height: '50px'
-        });
-        return $helper;
-      },
-      placeholder: function($dragging) {
-        $placeholder = $dragging.clone();
-        $placeholder.css('background', 'red');
-        return $placeholder;
-      },
-      droppable: '.droparea',
-      cursorPosition: 'center'
-    });
-
-    dragdrop2.on('drop', function (e, target) {
-      $(target).append($('<div>Dropped on me!</div>'));
-    });
-
-    var dragdrop3 = simple.dragdrop({
-      el: '.wrapper-3',
-      draggable: '.box',
-      helper: $('<p>drag helper</p>'),
-      placeholder: $('<p>placeholder</p>'),
-      droppable: '.droparea',
-      cursorPosition: 'cornor',
-      cursorOffset: {
-        top: -20,
-        left: -20
-      },
-      axis: 'y'
-    });
-
-    dragdrop3.on('drop', function (e, target) {
-      $(target).append($('<div>Dropped on me!</div>'));
-    });
-
+    initDragdrop();
   });
 </script>
 </body>
