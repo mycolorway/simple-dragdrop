@@ -37,13 +37,13 @@ class Dragdrop extends SimpleModule
       @_dragStart(e)
       @_renderPlaceholder()
 
-      @.trigger('dragstart.simple-dragdrop', @dragging)
+      @.trigger('dragstart', @dragging)
 
       #bind event
       $(document).on 'mousemove.simple-dragdrop', (e)=>
         return unless @dragging
         @_dragMove(e)
-        @.trigger('drag.simple-dragdrop', @dragging)
+        @.trigger('drag', @dragging)
 
       $(document).one 'mouseup.simple-dragdrop', (e) =>
         return unless @dragging
