@@ -31,6 +31,7 @@ class Dragdrop extends SimpleModule
     @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e)=>
       return if @dragging
       e.preventDefault()
+      @dragging = $(e.currentTarget)
 
       timer = setTimeout =>
         $(document).off('.simple-dragdrop.click')
@@ -38,10 +39,13 @@ class Dragdrop extends SimpleModule
         @clicked = false
       , 200
 
-      $(document).one 'mouseup.simple-dragdrop.click', =>
+      #bind event for click detect
+      $(document).one 'mouseup.simple-dragdrop.click', (e)=>
+        e.preventDefault()
         @clicked = true
         $(document).off('.simple-dragdrop.click')
-        @.trigger 'click', e.currentTarget
+        @.trigger 'click', @dragging
+        @dragging = null
 
       $(document).one 'mousemove.simple-dragdrop.click', =>
         clearTimeout(timer)
@@ -54,15 +58,14 @@ class Dragdrop extends SimpleModule
     $(document).off '.simple-dragdrop'
 
   _processDrag: (e) ->
-    @dragging = $(e.currentTarget)
+    return unless @dragging
     @_renderHelper()
     @_dragStart(e)
     @_renderPlaceholder()
 
     @.trigger('dragstart', @dragging)
 
-
-    #bind event
+    #bind event for drag&drop
     $(document).on 'mousemove.simple-dragdrop', (e)=>
       return unless @dragging
       @_dragMove(e)
@@ -74,7 +77,6 @@ class Dragdrop extends SimpleModule
       @.trigger('dragend', @dragging)
       @_dragEnd()
 
-    #Dropevent
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
       $target = $(e.currentTarget)
       return unless $target
