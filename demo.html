@@ -136,7 +136,10 @@
       });
       dragdrop.on('drop', function(e, dragging, target){
         $(target).append($('<p>dropped!</p>'));
-      })
+      });
+      dragdrop.on('click', function(e, dragging) {
+        console.log('clicked!');
+      });
     };
 
     $('select, input').change(function(){

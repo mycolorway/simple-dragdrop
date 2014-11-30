@@ -32,43 +32,64 @@ class Dragdrop extends SimpleModule
       return if @dragging
       e.preventDefault()
 
-      @dragging = $(e.currentTarget)
-      @_renderHelper()
-      @_dragStart(e)
-      @_renderPlaceholder()
+      timer = setTimeout =>
+        $(document).off('.simple-dragdrop.click')
+        @_processDrag(e) unless @clicked
+        @clicked = false
+      , 200
 
-      @.trigger('dragstart', @dragging)
+      $(document).one 'mouseup.simple-dragdrop.click', =>
+        @clicked = true
+        $(document).off('.simple-dragdrop.click')
+        @.trigger 'click', e.currentTarget
 
-      #bind event
-      $(document).on 'mousemove.simple-dragdrop', (e)=>
-        return unless @dragging
-        @_dragMove(e)
-        @.trigger('drag', @dragging)
-
-      $(document).one 'mouseup.simple-dragdrop', (e) =>
-        return unless @dragging
-        @.trigger('dragend', @dragging)
-        @_dragEnd()
-
-      #Dropevent
-      $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
-        $target = $(e.currentTarget)
-        return unless $target
-        @.trigger('drop', [@dragging, $target])
-
-      @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
-        return unless @dragging
-        $target = $(e.currentTarget)
-        @.trigger('dragenter', [@dragging, $target])
-
-      @el.on 'mouseleave.simple-dragdrop', @opts.droppable, (e)=>
-        return unless @dragging
-        $target = $(e.currentTarget)
-        @.trigger('dragleave', [@dragging, $target])
+      $(document).one 'mousemove.simple-dragdrop.click', =>
+        clearTimeout(timer)
+        $(document).off('.simple-dragdrop.click')
+        @_processDrag(e) unless @clicked
+        @clicked = false
 
   _unbind: ->
     @el.off '.simple-dragdrop'
     $(document).off '.simple-dragdrop'
+
+  _processDrag: (e) ->
+    @dragging = $(e.currentTarget)
+    @_renderHelper()
+    @_dragStart(e)
+    @_renderPlaceholder()
+
+    @.trigger('dragstart', @dragging)
+
+
+    #bind event
+    $(document).on 'mousemove.simple-dragdrop', (e)=>
+      return unless @dragging
+      @_dragMove(e)
+      @.trigger('drag', @dragging)
+
+
+    $(document).one 'mouseup.simple-dragdrop', (e) =>
+      return unless @dragging
+      @.trigger('dragend', @dragging)
+      @_dragEnd()
+
+    #Dropevent
+    $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
+      $target = $(e.currentTarget)
+      return unless $target
+      @.trigger('drop', [@dragging, $target])
+
+    @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
+      return unless @dragging
+      $target = $(e.currentTarget)
+      @.trigger('dragenter', [@dragging, $target])
+
+    @el.on 'mouseleave.simple-dragdrop', @opts.droppable, (e)=>
+      return unless @dragging
+      $target = $(e.currentTarget)
+      @.trigger('dragleave', [@dragging, $target])
+
 
   destroy: ->
     @_unbind()
