@@ -9,6 +9,7 @@ class Dragdrop extends SimpleModule
     cursorOffset:
       top: 0
       left: 0
+    distance: 1
     axis: null
 
   _init: ->
@@ -33,25 +34,16 @@ class Dragdrop extends SimpleModule
       e.preventDefault()
       @dragging = $(e.currentTarget)
 
-      timer = setTimeout =>
-        $(document).off('.simple-dragdrop.click')
-        @_processDrag(e) unless @clicked
-        @clicked = false
-      , 200
-
       #bind event for click detect
-      $(document).one 'mouseup.simple-dragdrop.click', (e)=>
-        e.preventDefault()
-        @clicked = true
-        $(document).off('.simple-dragdrop.click')
-        @.trigger 'click', @dragging
+      $(document).one 'mouseup.simple-dragdrop', =>
+        $(document).off 'mousemove.simple-dragdrop'
         @dragging = null
 
-      $(document).one 'mousemove.simple-dragdrop.click', =>
-        clearTimeout(timer)
-        $(document).off('.simple-dragdrop.click')
-        @_processDrag(e) unless @clicked
-        @clicked = false
+      $(document).on 'mousemove.simple-dragdrop', (e2) =>
+        if Math.abs(e.pageX - e2.pageX) > @opts.distance or Math.abs(e.pageY - e2.pageY) > @opts.distance
+          $(document).off 'mouseup.simple-dragdrop'
+          $(document).off 'mousemove.simple-dragdrop'
+          @_processDrag(e)
 
   _unbind: ->
     @el.off '.simple-dragdrop'
@@ -59,6 +51,7 @@ class Dragdrop extends SimpleModule
 
   _processDrag: (e) ->
     return unless @dragging
+
     @_renderHelper()
     @_dragStart(e)
     @_renderPlaceholder()
