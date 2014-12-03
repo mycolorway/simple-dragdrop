@@ -9,6 +9,7 @@ class Dragdrop extends SimpleModule
     cursorOffset:
       top: 0
       left: 0
+    distance: 1
     axis: null
 
   _init: ->
@@ -32,47 +33,62 @@ class Dragdrop extends SimpleModule
       return if @dragging
       e.preventDefault()
 
-      @dragging = $(e.currentTarget)
-      @_renderHelper()
-      @_dragStart(e)
-      @_renderPlaceholder()
+      $target = $(e.currentTarget)
+      pos =
+        top: e.pageY
+        left: e.pageX
 
-      @.trigger('dragstart', @dragging)
+      #bind event for drag buffer
+      $(document).one 'mouseup.simple-dragdrop', =>
+        $(document).off 'mousemove.simple-dragdrop'
 
-      #bind event
-      $(document).on 'mousemove.simple-dragdrop', (e)=>
-        return unless @dragging
-        @_dragMove(e)
-        @.trigger('drag', @dragging)
-
-      $(document).one 'mouseup.simple-dragdrop', (e) =>
-        return unless @dragging
-        @.trigger('dragend', @dragging)
-        @_dragEnd()
-
-      #Dropevent
-      $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
-        $target = $(e.currentTarget)
-        return unless $target
-        @.trigger('drop', [@dragging, $target])
-
-      @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
-        return unless @dragging
-        $target = $(e.currentTarget)
-        @.trigger('dragenter', [@dragging, $target])
-
-      @el.on 'mouseleave.simple-dragdrop', @opts.droppable, (e)=>
-        return unless @dragging
-        $target = $(e.currentTarget)
-        @.trigger('dragleave', [@dragging, $target])
+      $(document).on 'mousemove.simple-dragdrop', (e2) =>
+        if Math.abs(e.pageX - e2.pageX) > @opts.distance or Math.abs(e.pageY - e2.pageY) > @opts.distance
+          $(document).off 'mouseup.simple-dragdrop'
+          $(document).off 'mousemove.simple-dragdrop'
+          @_dragStart($target, pos)
 
   _unbind: ->
     @el.off '.simple-dragdrop'
     $(document).off '.simple-dragdrop'
 
-  destroy: ->
-    @_unbind()
-    @el.removeData 'dragdrop'
+  _dragStart: ($target, pos) ->
+    @dragging = $target
+
+    @_renderHelper()
+    @_initPosition(pos)
+    @_renderPlaceholder()
+
+    @.trigger('dragstart', @dragging)
+
+    #bind event for drag&drop
+    $(document).on 'mousemove.simple-dragdrop', (e)=>
+      return unless @dragging
+      pos =
+        top: e.pageY
+        left: e.pageX
+      @_dragMove(pos)
+      @.trigger('drag', @dragging)
+
+    $(document).one 'mouseup.simple-dragdrop', (e) =>
+      return unless @dragging
+      @.trigger('dragend', @dragging)
+      @_dragEnd()
+
+    $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
+      $target = $(e.currentTarget)
+      return unless $target
+      @.trigger('drop', [@dragging, $target])
+
+    @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
+      return unless @dragging
+      $target = $(e.currentTarget)
+      @.trigger('dragenter', [@dragging, $target])
+
+    @el.on 'mouseleave.simple-dragdrop', @opts.droppable, (e)=>
+      return unless @dragging
+      $target = $(e.currentTarget)
+      @.trigger('dragleave', [@dragging, $target])
 
   _renderHelper: ->
     if $.isFunction @opts.helper
@@ -89,7 +105,21 @@ class Dragdrop extends SimpleModule
       'z-index': 100
     .insertAfter @dragging
 
-  _dragStart: (e) ->
+  _renderPlaceholder: ->
+    if $.isFunction @opts.placeholder
+      @placeholder = @opts.placeholder.call(@, @dragging)
+    else if @opts.placeholder
+      @placeholder = $(@opts.placeholder).first()
+
+    unless @placeholder
+      @placeholder = @dragging.clone(false)
+      @placeholder.css
+        'visibility': 'hidden'
+
+    @dragging.hide()
+    @placeholder.insertAfter(@dragging)
+
+  _initPosition: (pos) ->
     cursorPosition = @helper.data 'cursorPosition'
     cursorPosition = @opts.cursorPosition unless cursorPosition
 
@@ -101,29 +131,29 @@ class Dragdrop extends SimpleModule
 
       when 'center'
         @originalOffset =
-          top: @dragging.position().top + e.pageY - @dragging.offset().top - @helper.outerHeight(true)/2
-          left: @dragging.position().left + e.pageX - @dragging.offset().left - @helper.outerWidth(true)/2
+          top: @dragging.position().top + pos.top - @dragging.offset().top - @helper.outerHeight(true)/2
+          left: @dragging.position().left + pos.left - @dragging.offset().left - @helper.outerWidth(true)/2
 
       when 'corner'
         @originalOffset =
-          top: @dragging.position().top + e.pageY - @dragging.offset().top
-          left: @dragging.position().left + e.pageX - @dragging.offset().left
+          top: @dragging.position().top + pos.top - @dragging.offset().top
+          left: @dragging.position().left + pos.left - @dragging.offset().left
 
     @originalOffset.top += @opts.cursorOffset.top
     @originalOffset.left += @opts.cursorOffset.left
 
     @originalPosition =
-      top: e.pageY
-      left: e.pageX
+      top: pos.top
+      left: pos.left
 
     @helper.css
       visibility: 'visible'
       top: @originalOffset.top
       left: @originalOffset.left
 
-  _dragMove: (e) ->
-    deltaY = e.pageY - @originalPosition.top
-    delatX = e.pageX - @originalPosition.left
+  _dragMove: (pos) ->
+    deltaY = pos.top - @originalPosition.top
+    delatX = pos.left - @originalPosition.left
 
     top = @originalOffset.top + deltaY
     left = @originalOffset.left + delatX
@@ -150,19 +180,10 @@ class Dragdrop extends SimpleModule
     $(document).off 'mouseup.simple-dragdrop mousemove.simple-dragdrop'
     @el.off 'mouseenter.simple-dragdrop mousemove.simple-dragdrop'
 
-  _renderPlaceholder: ->
-    if $.isFunction @opts.placeholder
-      @placeholder = @opts.placeholder.call(@, @dragging)
-    else if @opts.placeholder
-      @placeholder = $(@opts.placeholder).first()
+  destroy: ->
+    @_unbind()
+    @el.removeData 'dragdrop'
 
-    unless @placeholder
-      @placeholder = @dragging.clone(false)
-      @placeholder.css
-        'visibility': 'hidden'
-
-    @dragging.hide()
-    @placeholder.insertAfter(@dragging)
 
 dragdrop = (opts) ->
   new Dragdrop(opts)

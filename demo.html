@@ -69,10 +69,12 @@
       <option value="2">center</option>
     </select>
   </p>
-  <p>cursorOffset选项
-  <p>top: <input type="text" id="top"/></p>
-  <p>left: <input type="text" id="left"/></p>
+  <p>其他选项
+  <p>cursorOffset.top: <input type="text" id="top" value="0"/></p>
+  <p>cursorOffset.left: <input type="text" id="left" value="0"/></p>
+  <p>distance: <input type="text" id="distance" value="1"/></p>
   </p>
+
   <hr/>
   <h4>Demo</h4>
 
@@ -122,7 +124,8 @@
         helper: helper,
         placeholder: placeholder,
         cursorPosition: cursorPostion,
-        cursorOffset: cursorOffset
+        cursorOffset: cursorOffset,
+        distance: $('#distance').val() | 1
       };
       dragdrop = simple.dragdrop(option);
       dragdrop.on('dragenter', function(e, dragging, target){
@@ -136,11 +139,18 @@
       });
       dragdrop.on('drop', function(e, dragging, target){
         $(target).append($('<p>dropped!</p>'));
-      })
+      });
+      dragdrop.on('click', function(e, dragging) {
+        console.log('clicked!');
+      });
     };
 
     $('select, input').change(function(){
       initDragdrop();
+    });
+
+    $('.box').on('click', function(e){
+      $(e.currentTarget).append($('<p>clicked!</p>'));
     });
 
     initDragdrop();
