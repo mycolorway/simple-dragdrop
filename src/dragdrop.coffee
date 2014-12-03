@@ -46,13 +46,13 @@ class Dragdrop extends SimpleModule
         if Math.abs(e.pageX - e2.pageX) > @opts.distance or Math.abs(e.pageY - e2.pageY) > @opts.distance
           $(document).off 'mouseup.simple-dragdrop'
           $(document).off 'mousemove.simple-dragdrop'
-          @_startDrag($target, pos)
+          @_dragStart($target, pos)
 
   _unbind: ->
     @el.off '.simple-dragdrop'
     $(document).off '.simple-dragdrop'
 
-  _startDrag: ($target, pos) ->
+  _dragStart: ($target, pos) ->
     @dragging = $target
 
     @_renderHelper()
@@ -90,11 +90,6 @@ class Dragdrop extends SimpleModule
       $target = $(e.currentTarget)
       @.trigger('dragleave', [@dragging, $target])
 
-
-  destroy: ->
-    @_unbind()
-    @el.removeData 'dragdrop'
-
   _renderHelper: ->
     if $.isFunction @opts.helper
       @helper = @opts.helper.call(@, @dragging)
@@ -109,6 +104,20 @@ class Dragdrop extends SimpleModule
       'visibility': 'hidden'
       'z-index': 100
     .insertAfter @dragging
+
+  _renderPlaceholder: ->
+    if $.isFunction @opts.placeholder
+      @placeholder = @opts.placeholder.call(@, @dragging)
+    else if @opts.placeholder
+      @placeholder = $(@opts.placeholder).first()
+
+    unless @placeholder
+      @placeholder = @dragging.clone(false)
+      @placeholder.css
+        'visibility': 'hidden'
+
+    @dragging.hide()
+    @placeholder.insertAfter(@dragging)
 
   _initPosition: (pos) ->
     cursorPosition = @helper.data 'cursorPosition'
@@ -171,19 +180,10 @@ class Dragdrop extends SimpleModule
     $(document).off 'mouseup.simple-dragdrop mousemove.simple-dragdrop'
     @el.off 'mouseenter.simple-dragdrop mousemove.simple-dragdrop'
 
-  _renderPlaceholder: ->
-    if $.isFunction @opts.placeholder
-      @placeholder = @opts.placeholder.call(@, @dragging)
-    else if @opts.placeholder
-      @placeholder = $(@opts.placeholder).first()
+  destroy: ->
+    @_unbind()
+    @el.removeData 'dragdrop'
 
-    unless @placeholder
-      @placeholder = @dragging.clone(false)
-      @placeholder.css
-        'visibility': 'hidden'
-
-    @dragging.hide()
-    @placeholder.insertAfter(@dragging)
 
 dragdrop = (opts) ->
   new Dragdrop(opts)
