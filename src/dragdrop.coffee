@@ -72,13 +72,18 @@ class Dragdrop extends SimpleModule
 
     $(document).one 'mouseup.simple-dragdrop', (e) =>
       return unless @dragging
-      @.trigger('dragend', @dragging)
+      $dragging = $(@dragging)
       @_dragEnd()
+      @.trigger('dragend', $dragging)
 
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
       $target = $(e.currentTarget)
       return unless $target
-      @.trigger('drop', [@dragging, $target])
+      $dragging = $(@dragging)
+      #when drop event triggered, dragend will be triggered in this scope, and reset all
+      @_dragEnd()
+      @.trigger('dragend', $dragging)
+      @.trigger('drop', [$dragging, $target])
 
     @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
       return unless @dragging
