@@ -69,3 +69,29 @@ __axis__
 __destroy()__
 
 销毁dragdrop对象，还原初始环境
+
+#### 事件
+
+__dragstart__ opts: $dragging
+
+当拖拽发生时触发，参数是被拖拽的元素的jQuery对象
+
+__dragenter__ opts: $dragging, $target
+
+当被拖拽元素进入可以放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象
+
+__dragleave__ opts: $dragging, $target
+
+当被拖拽元素离开可以放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象
+
+__drag__ opts: $dragging
+
+被拖拽的时候，持续触发，参数是被拖拽的元素的jQuery对象
+
+__dragend__ opts: $dragging
+
+当拖拽结束的时候触发，参数是被拖拽的元素的jQuery对象
+
+__drop__ opts: $dragging, $target
+
+当拖拽元素放置到可放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象

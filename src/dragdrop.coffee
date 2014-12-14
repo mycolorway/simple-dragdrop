@@ -82,8 +82,8 @@ class Dragdrop extends SimpleModule
       $dragging = $(@dragging)
       #when drop event triggered, dragend will be triggered in this scope, and reset all
       @_dragEnd()
-      @trigger('dragend', @dragging)
-      @trigger('drop', [@dragging, $target])
+      @trigger('dragend', $dragging)
+      @trigger('drop', [$dragging, $target])
 
     @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
       return unless @dragging

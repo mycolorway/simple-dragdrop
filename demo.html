@@ -1,160 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Dragdrop demo</title>
-  <meta charset="utf-8"/>
+  <title>Simple Dragdrop Demo</title>
+  <meta charset="utf-8" />
+  <style type="text/css">
+    html, body {
+      background:#F9F9F9;
+      padding: 0;
+      margin: 0;
+      font: 14px/1.6 "Lucida Grande", "Helvetica", sans-serif;
+      color: #333;
+    }
+    .wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      color: rgb(113, 113, 113);
+    }
+    header {
+      margin: 50px 0;
+      text-align: center;
+    }
+    section {
+      margin: 30px 0;
+    }
+    .ball {
+      display: inline-block;
+      margin-left: 10px;
+      color: #ffffff;
+      line-height: 80px;
+      border-radius: 50%;
+      height: 80px;
+      width: 80px;
+      text-align: center;
+      -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+      -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+      vertical-align: middle;
+    }
+    .bowl {
+      color: #ffffff;
+      text-align: center;
+      line-height: 100px;
+      margin-left: 10px;
+      display: inline-block;
+      border-radius: 40px;
+      height: 100px;
+      width: 200px;
+      background: #34495e;
+      -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+      -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23);
+    }
+  </style>
 </head>
 
 <body>
-<style>
-  .wrapper {
-    padding: 20px;
-    margin: 20px;
-    border: 1px solid black;
-    overflow: auto;
-  }
-  .box {
-    height: 100px;
-    width: 100px;
-    background: grey;
-  }
 
-  body {
-    margin: 10px;
-  }
-
-  .droparea {
-    border: 1px solid black;
-    height: 100px;
-    width: 100px;
-    float: left;
-    margin-top: 20px;
-    margin-right: 40px;
-  }
-  .droparea:after {
-    clear: both;
-  }
-  .droparea p {
-    margin: 0;
-  }
-
-  .drag-on {
-    background: red;
-  }
-</style>
-<h1>Simple Dragdrop Demo</h1>
-<div class="wrapper wrapper-1">
-
-  <h4>选项自定义</h4>
-  <p>helper选项
-    <select name="helper" id="helper">
-      <option value="0">空（默认）</option>
-      <option value="1">Dom元素</option>
-      <option value="2">函数</option>
-    </select>
-  </p>
-
-  <p>placeholder选项
-    <select name="placeholder" id="placeholder">
-      <option value="0">空（默认）</option>
-      <option value="1"">Dom元素</option>
-      <option value="2">函数</option>
-    </select>
-  </p>
-
-  <p>cursorPosition选项
-    <select name="cursorPosition" id="cursorPosition">
-      <option value="0">auto</option>
-      <option value="1">corner</option>
-      <option value="2">center</option>
-    </select>
-  </p>
-  <p>其他选项
-  <p>cursorOffset.top: <input type="text" id="top" value="0"/></p>
-  <p>cursorOffset.left: <input type="text" id="left" value="0"/></p>
-  <p>distance: <input type="text" id="distance" value="1"/></p>
-  </p>
-
-  <hr/>
-  <h4>Demo</h4>
-
-
-  <div class="box">dragme</div>
-  <div class="droparea"></div>
-  <div class="droparea"></div>
-  <div class="droparea"></div>
+<div class="wrapper">
+  <header>
+    <h1>Simple Dragdrop</h1>
+  </header>
+  <section>
+    <div class="ball" data-color="#c0392b">Drag!</div>
+    <div class="ball" data-color="#f39c12">Drag!</div>
+    <div class="ball" data-color="#f1c40f">Drag!</div>
+    <div class="ball" data-color="#27ae60">Drag!</div>
+    <div class="ball" data-color="#16a085">Drag!</div>
+    <div class="ball" data-color="#3498db">Drag!</div>
+    <div class="ball" data-color="#9b59b6">Drag!</div>
+    <br/><br/>
+    <div class="bowl">Color Me!</div>
+    <div class="bowl">Color Me!</div>
+    <div class="bowl">Color Me!</div>
+  </section>
 </div>
-
-
-<script src="vendor/bower/jquery/dist/jquery.js"></script>
-<script src="vendor/bower/simple-module/lib/module.js"></script>
-<script src="lib/dragdrop.js"></script>
-<script>
-  $(document).ready(function () {
-
-    _helper = [null, $('<p>this is a helper</p>'), function(dragging){
-      $helper = $(dragging).clone();
-      $helper.css({
-        background: 'yellow',
-        height: '50px'
+<script type="text/javascript" src="vendor/bower/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="vendor/bower/simple-module/lib/module.js"></script>
+<script type="text/javascript" src="lib/dragdrop.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.ball').each(function (index, ele) {
+      $ele = $(ele);
+      $ele.css('background', $ele.data('color'));
     });
-      return $helper;
-    }];
-
-    _placeholder = [null, $('<p>this is a placeholder</p>'), function(dragging) {
-      $placeholder = $(dragging).clone();
-      $placeholder.css('background', 'blue');
-      return $placeholder;
-    }];
-
-    _cursorPosition = ['auto', 'corner', 'center'];
-
-    initDragdrop = function() {
-      helper = _helper[$('#helper').val()];
-      placeholder = _placeholder[$('#placeholder').val()];
-      cursorPostion = _cursorPosition[$('#cursorPosition').val()];
-      cursorOffset = {
-        top: $('#top').val() | 0,
-        left: $('#left').val() | 0
-      };
-      option = {
-        el: document,
-        draggable: '.box',
-        droppable: '.droparea',
-        helper: helper,
-        placeholder: placeholder,
-        cursorPosition: cursorPostion,
-        cursorOffset: cursorOffset,
-        distance: $('#distance').val() | 1
-      };
-      dragdrop = simple.dragdrop(option);
-      dragdrop.on('dragenter', function(e, dragging, target){
-        $(target).addClass('drag-on');
-      });
-      dragdrop.on('dragleave', function(e, dragging, target){
-        $(target).removeClass('drag-on');
-      });
-      dragdrop.on('dragend', function(e, dragging){
-        $('.droparea').removeClass('drag-on');
-      });
-      dragdrop.on('drop', function(e, dragging, target){
-        console.log(dragging);
-        $(target).append($('<p>dropped!</p>'));
-      });
-      dragdrop.on('click', function(e, dragging) {
-        console.log('clicked!');
-      });
-    };
-
-    $('select, input').change(function(){
-      initDragdrop();
+    dragdrop = simple.dragdrop({
+      draggable: '.ball',
+      droppable: '.bowl',
+      placeholder: function(dragging){
+        $placeholder = $(dragging).clone();
+        $placeholder.css({opacity: 0.5});
+        return $placeholder;
+      },
+      helper: function(dragging){
+        $helper = $(dragging).clone();
+        $helper.text('');
+        return $helper;
+      }
     });
 
-    $('.box').on('click', function(e){
-      $(e.currentTarget).append($('<p>clicked!</p>'));
+    dragdrop.on('dragenter', function(e, $dragging, $target){
+      $target.text('Drop!')
     });
-
-    initDragdrop();
+    dragdrop.on('dragleave', function(e, $dragging, $target){
+      $target.text('Color Me!')
+    });
+    dragdrop.on('drop', function(e, $dragging, $target) {
+      color = $dragging.css('background-color');
+      console.log($target);
+      $target.text('Color Me!')
+      $target.css('background-color', color);
+    });
   });
 </script>
 </body>
