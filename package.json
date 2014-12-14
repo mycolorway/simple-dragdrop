@@ -1,5 +1,5 @@
 {
-  "name": "simple-sample",
+  "name": "simple-dragdrop",
   "version": "1.0.0",
   "description": "A simple Drag&Drop like component based on Simple Module",
   "repository": {
@@ -10,6 +10,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mycolorway/simple-dragdrop/issues"
+  },
+  "scripts": {
+    "test": "grunt test --verbose"
   },
   "homepage": "https://github.com/mycolorway/simple-dragdrop",
   "devDependencies": {
