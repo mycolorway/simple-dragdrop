@@ -1,5 +1,7 @@
 # Simple Dragdrop
 
+[![Circle CI](https://circleci.com/gh/mycolorway/simple-dragdrop.svg?style=svg)](https://circleci.com/gh/mycolorway/simple-dragdrop)
+
 一个简单的Drag&Drop组件，用来替代D&D API。
 
 依赖项：
