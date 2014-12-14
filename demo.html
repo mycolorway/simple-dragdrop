@@ -98,6 +98,15 @@
       }
     });
 
+    dragdrop.on('dragstart', function(){
+      $('html').css('cursor', 'move');
+      $('.bowl').css('cursor', 'copy');
+    });
+    dragdrop.on('dragend', function(){
+      $('.bowl').css('cursor', 'default');
+      $('html').css('cursor', 'default');
+    });
+
     dragdrop.on('dragenter', function(e, $dragging, $target){
       $target.text('Drop!')
     });
