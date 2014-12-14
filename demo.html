@@ -138,6 +138,7 @@
         $('.droparea').removeClass('drag-on');
       });
       dragdrop.on('drop', function(e, dragging, target){
+        console.log(dragging);
         $(target).append($('<p>dropped!</p>'));
       });
       dragdrop.on('click', function(e, dragging) {

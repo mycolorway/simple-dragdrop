@@ -59,7 +59,7 @@ class Dragdrop extends SimpleModule
     @_initPosition(pos)
     @_renderPlaceholder()
 
-    @.trigger('dragstart', @dragging)
+    @trigger('dragstart', @dragging)
 
     #bind event for drag&drop
     $(document).on 'mousemove.simple-dragdrop', (e)=>
@@ -68,13 +68,13 @@ class Dragdrop extends SimpleModule
         top: e.pageY
         left: e.pageX
       @_dragMove(pos)
-      @.trigger('drag', @dragging)
+      @trigger('drag', @dragging)
 
     $(document).one 'mouseup.simple-dragdrop', (e) =>
       return unless @dragging
       $dragging = $(@dragging)
       @_dragEnd()
-      @.trigger('dragend', $dragging)
+      @trigger('dragend', $dragging)
 
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
       $target = $(e.currentTarget)
@@ -82,18 +82,18 @@ class Dragdrop extends SimpleModule
       $dragging = $(@dragging)
       #when drop event triggered, dragend will be triggered in this scope, and reset all
       @_dragEnd()
-      @.trigger('dragend', $dragging)
-      @.trigger('drop', [$dragging, $target])
+      @trigger('dragend', @dragging)
+      @trigger('drop', [@dragging, $target])
 
     @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
       return unless @dragging
       $target = $(e.currentTarget)
-      @.trigger('dragenter', [@dragging, $target])
+      @trigger('dragenter', [@dragging, $target])
 
     @el.on 'mouseleave.simple-dragdrop', @opts.droppable, (e)=>
       return unless @dragging
       $target = $(e.currentTarget)
-      @.trigger('dragleave', [@dragging, $target])
+      @trigger('dragleave', [@dragging, $target])
 
   _renderHelper: ->
     if $.isFunction @opts.helper

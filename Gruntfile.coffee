@@ -12,7 +12,7 @@ module.exports = (grunt) ->
           'lib/dragdrop.js': 'src/dragdrop.coffee'
       spec:
         files:
-          'spec/sample-spec.js': 'spec/sample-spec.coffee'
+          'spec/dragdrop-spec.js': 'spec/dragdrop-spec.coffee'
 
     umd:
       all:
@@ -48,11 +48,12 @@ module.exports = (grunt) ->
         src: ['lib/**/*.js']
         options:
           outfile: 'spec/index.html'
-          styles: 'styles/sample.css'
-          specs: 'spec/sample-spec.js'
+          specs: 'spec/dragdrop-spec.js'
           vendor: [
             'vendor/bower/jquery/dist/jquery.min.js'
             'vendor/bower/simple-module/lib/module.js'
+            'vendor/bower/jasmine-jquery/lib/jasmine-jquery.js'
+            'lib/dragdrop.js'
           ]
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -60,7 +61,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   grunt.loadNpmTasks 'grunt-umd'
 
-  grunt.registerTask 'default', ['coffee', 'umd', 'watch']
+  grunt.registerTask 'default', ['coffee', 'umd', 'jasmine:test:build', 'watch']
+  grunt.registerTask 'test', ['coffee', 'umd', 'jasmine:test']
 
 
 
