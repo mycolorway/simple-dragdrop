@@ -59,7 +59,7 @@ class Dragdrop extends SimpleModule
     @_initPosition(pos)
     @_renderPlaceholder()
 
-    @trigger('dragstart', @dragging)
+    @trigger('dragstart', [@dragging, @helper, @placeholder])
 
     #bind event for drag&drop
     $(document).on 'mousemove.simple-dragdrop', (e)=>
@@ -73,6 +73,7 @@ class Dragdrop extends SimpleModule
     $(document).one 'mouseup.simple-dragdrop', (e) =>
       return unless @dragging
       $dragging = $(@dragging)
+      @trigger('before-dragend', $dragging)
       @_dragEnd()
       @trigger('dragend', $dragging)
 
@@ -81,6 +82,8 @@ class Dragdrop extends SimpleModule
       return unless $target
       $dragging = $(@dragging)
       #when drop event triggered, dragend will be triggered in this scope, and reset all
+      @trigger('before-dragend', $dragging)
+      @trigger('before-drop', [$dragging, $target])
       @_dragEnd()
       @trigger('dragend', $dragging)
       @trigger('drop', [$dragging, $target])
