@@ -74,26 +74,30 @@ __destroy()__
 
 #### 事件
 
-__dragstart__ opts: $dragging
+__dragstart__ opts: dragging, helper, placeholder
 
-当拖拽发生时触发，参数是被拖拽的元素的jQuery对象
+当拖拽发生时触发
 
-__dragenter__ opts: $dragging, $target
+__dragenter__ opts: dragging, target, helper, placeholder
 
-当被拖拽元素进入可以放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象
+当被拖拽元素进入可以放置区域时触发
 
-__dragleave__ opts: $dragging, $target
+__dragleave__ opts: dragging, target, helper, placeholder
 
-当被拖拽元素离开可以放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象
+当被拖拽元素离开可以放置区域时触发
 
-__drag__ opts: $dragging
+__drag__ opts: dragging, helper, placeholder
 
-被拖拽的时候，持续触发，参数是被拖拽的元素的jQuery对象
+被拖拽的时候，持续触发
 
-__dragend__ opts: $dragging
+__before-dragend__ opts: dragging, helper, placeholder
 
-当拖拽结束的时候触发，参数是被拖拽的元素的jQuery对象
+当拖拽结束前触发，此时，helper以及placeholder都没有被移除
 
-__drop__ opts: $dragging, $target
+__dragend__ opts: dragging
 
-当拖拽元素放置到可放置区域时触发，参数是被拖拽元素和可放置区域的jQuery对象
+当拖拽结束的时候触发，此时，helper以及placeholder已经被移除
+
+__drop__ opts: dragging, target
+
+当拖拽元素放置到可放置区域时触发
