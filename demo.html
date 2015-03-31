@@ -107,17 +107,16 @@
       $('html').css('cursor', 'default');
     });
 
-    dragdrop.on('dragenter', function(e, $dragging, $target){
-      $target.text('Drop!')
+    dragdrop.on('dragenter', function(e, obj){
+      $(obj.target).text('Drop!')
     });
-    dragdrop.on('dragleave', function(e, $dragging, $target){
-      $target.text('Color Me!')
+    dragdrop.on('dragleave', function(e, obj){
+      $(obj.target).text('Color Me!')
     });
-    dragdrop.on('drop', function(e, $dragging, $target) {
-      color = $dragging.css('background-color');
-      console.log($target);
-      $target.text('Color Me!')
-      $target.css('background-color', color);
+    dragdrop.on('drop', function(e, obj) {
+      color = $(obj.dragging).css('background-color');
+      $(obj.target).text('Color Me!');
+      $(obj.target).css('background-color', color);
     });
   });
 </script>
