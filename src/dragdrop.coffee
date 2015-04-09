@@ -218,3 +218,5 @@ class Dragdrop extends SimpleModule
 
 dragdrop = (opts) ->
   new Dragdrop(opts)
+
+dragdrop.class = Dragdrop
