@@ -1,6 +1,6 @@
 {
   "name": "simple-dragdrop",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://github.com/mycolorway/simple-dragdrop",
   "authors": [
     "Lcj <emlcj@gmail.com>"
@@ -31,4 +31,3 @@
     "jasmine-jquery": "2.x"
   }
 }
-

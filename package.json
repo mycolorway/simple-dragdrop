@@ -1,6 +1,6 @@
 {
   "name": "simple-dragdrop",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A simple Drag&Drop like component based on Simple Module",
   "repository": {
     "type": "git",
@@ -21,6 +21,9 @@
     "grunt-contrib-coffee": "0.x",
     "grunt-contrib-jasmine": "0.x",
     "grunt-umd": "2.x"
+  },
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "simple-module": "~2.0.6"
   }
 }
-
