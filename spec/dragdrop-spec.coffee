@@ -195,6 +195,7 @@ describe 'dragdrop', ->
     spyDragLeave = spyOnEvent(dragdrop, 'dragleave')
     spyDrop = spyOnEvent(dragdrop, 'drop')
     spyDragEnd = spyOnEvent(dragdrop, 'dragend')
+    spyDragDes = spyOnEvent(dragdrop, 'dragdestroy')
 
     mousedown(5, 5)
     mousemove(10, 10)
@@ -210,3 +211,7 @@ describe 'dragdrop', ->
     $droppable.trigger 'mouseup'
     expect(spyDrop).toHaveBeenTriggered()
     expect(spyDragEnd).toHaveBeenTriggered()
+
+    endDragStop()
+    expect(spyDragDes).toHaveBeenTriggered()
+

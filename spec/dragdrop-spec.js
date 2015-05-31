@@ -180,7 +180,7 @@
       return endDragStop();
     });
     return it('shoud trigger custom event', function() {
-      var dragdrop, spyDragEnd, spyDragEnter, spyDragLeave, spyDragStart, spyDrop;
+      var dragdrop, spyDragDes, spyDragEnd, spyDragEnter, spyDragLeave, spyDragStart, spyDrop;
       dragdrop = simple.dragdrop({
         draggable: '.draggable',
         droppable: '.droppable'
@@ -190,6 +190,7 @@
       spyDragLeave = spyOnEvent(dragdrop, 'dragleave');
       spyDrop = spyOnEvent(dragdrop, 'drop');
       spyDragEnd = spyOnEvent(dragdrop, 'dragend');
+      spyDragDes = spyOnEvent(dragdrop, 'dragdestroy');
       mousedown(5, 5);
       mousemove(10, 10);
       expect(spyDragStart).toHaveBeenTriggered();
@@ -199,7 +200,9 @@
       expect(spyDragLeave).toHaveBeenTriggered();
       $droppable.trigger('mouseup');
       expect(spyDrop).toHaveBeenTriggered();
-      return expect(spyDragEnd).toHaveBeenTriggered();
+      expect(spyDragEnd).toHaveBeenTriggered();
+      endDragStop();
+      return expect(spyDragDes).toHaveBeenTriggered();
     });
   });
 
