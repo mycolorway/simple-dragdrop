@@ -211,7 +211,7 @@ class Dragdrop extends SimpleModule
     @el.off 'mouseenter.simple-dragdrop mousemove.simple-dragdrop'
 
   destroy: ->
-    @trigger 'dragdestroy'
+    @triggerHandler 'destroy'
     @_unbind()
     @el.removeData 'dragdrop'
 

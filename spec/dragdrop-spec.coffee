@@ -195,7 +195,7 @@ describe 'dragdrop', ->
     spyDragLeave = spyOnEvent(dragdrop, 'dragleave')
     spyDrop = spyOnEvent(dragdrop, 'drop')
     spyDragEnd = spyOnEvent(dragdrop, 'dragend')
-    spyDragDes = spyOnEvent(dragdrop, 'dragdestroy')
+    spyDragDes = spyOnEvent(dragdrop, 'destroy')
 
     mousedown(5, 5)
     mousemove(10, 10)
