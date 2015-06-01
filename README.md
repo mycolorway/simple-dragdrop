@@ -101,3 +101,7 @@ __dragend__ opts: dragging
 __drop__ opts: dragging, target
 
 当拖拽元素放置到可放置区域时触发
+
+__destroy__ 
+
+当组件销毁时触发

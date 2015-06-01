@@ -58,7 +58,6 @@ class Dragdrop extends SimpleModule
     @_renderHelper()
     @_initPosition(pos)
     @_renderPlaceholder()
-
     @trigger 'dragstart',
       dragging: @dragging
       helper: @helper
@@ -212,6 +211,7 @@ class Dragdrop extends SimpleModule
     @el.off 'mouseenter.simple-dragdrop mousemove.simple-dragdrop'
 
   destroy: ->
+    @triggerHandler 'destroy'
     @_unbind()
     @el.removeData 'dragdrop'
 
