@@ -5,12 +5,14 @@ class Dragdrop extends SimpleModule
     droppable: null
     helper: null
     placeholder: null
+    cursor: 'move'
     cursorPosition: 'auto'
     cursorOffset:
       top: 0
       left: 0
     distance: 1
     axis: null
+    handle: ''
 
   _init: ->
     @el = $(@opts.el)
@@ -31,9 +33,11 @@ class Dragdrop extends SimpleModule
   _bind: ->
     @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e)=>
       return if @dragging
-      e.preventDefault()
 
       $target = $(e.currentTarget)
+      handleEl = $target.find(@opts.handle).get(0)
+      return if @opts.handle and !$.contains(handleEl, e.target) and handleEl != e.target
+
       pos =
         top: e.pageY
         left: e.pageX
@@ -54,6 +58,8 @@ class Dragdrop extends SimpleModule
 
   _dragStart: ($target, pos) ->
     @dragging = $target
+    $body = $('body').css 'cursor', @opts.cursor
+    @_disableSelection $body
 
     @_renderHelper()
     @_initPosition(pos)
@@ -197,7 +203,7 @@ class Dragdrop extends SimpleModule
       top: top
       left: left
 
-  _dragEnd: () ->
+  _dragEnd: ->
     @placeholder.remove()
     @dragging.show()
     @helper.remove()
@@ -209,6 +215,14 @@ class Dragdrop extends SimpleModule
 
     $(document).off 'mouseup.simple-dragdrop mousemove.simple-dragdrop'
     @el.off 'mouseenter.simple-dragdrop mousemove.simple-dragdrop'
+    $body = $('body').css 'cursor', ''
+    @_enableSelection $body
+
+  _disableSelection: ($el) ->
+    $el.css 'user-select': 'none'
+
+  _enableSelection: ($el) ->
+    $el.css 'user-select': ''
 
   destroy: ->
     @triggerHandler 'destroy'
