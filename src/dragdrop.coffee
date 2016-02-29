@@ -64,10 +64,11 @@ class Dragdrop extends SimpleModule
     @_renderHelper()
     @_initPosition(pos)
     @_renderPlaceholder()
-    @trigger 'dragstart',
+    return if @triggerHandler 'dragstart', {
       dragging: @dragging
       helper: @helper
       placeholder: @placeholder
+    } == false
 
     #bind event for drag&drop
     $(document).on 'mousemove.simple-dragdrop', (e)=>
