@@ -82,17 +82,6 @@ class Dragdrop extends SimpleModule
         helper: @helper
         placeholder: @placeholder
 
-    $(document).one 'mouseup.simple-dragdrop', (e) =>
-      return unless @dragging
-      $dragging = $(@dragging)
-      @trigger 'beforedragend',
-        dragging: $dragging
-        helper: @helper
-        placeholder: @placeholder
-      @_dragEnd()
-      @trigger 'dragend',
-        dragging: $dragging
-
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
       $target = $(e.currentTarget)
       $dragging = $(@dragging)
@@ -108,6 +97,17 @@ class Dragdrop extends SimpleModule
       @trigger 'drop',
         dragging: $dragging
         target: $target
+
+    $(document).one 'mouseup.simple-dragdrop', (e) =>
+      return unless @dragging
+      $dragging = $(@dragging)
+      @trigger 'beforedragend',
+        dragging: $dragging
+        helper: @helper
+        placeholder: @placeholder
+      @_dragEnd()
+      @trigger 'dragend',
+        dragging: $dragging
 
     @el.on 'mouseenter.simple-dragdrop', @opts.droppable, (e)=>
       return unless @dragging
