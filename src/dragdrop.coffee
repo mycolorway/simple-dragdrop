@@ -85,7 +85,7 @@ class Dragdrop extends SimpleModule
     $(document).one 'mouseup.simple-dragdrop', (e) =>
       return unless @dragging
       $dragging = $(@dragging)
-      @trigger 'before-dragend',
+      @trigger 'beforedragend',
         dragging: $dragging
         helper: @helper
         placeholder: @placeholder
@@ -98,7 +98,7 @@ class Dragdrop extends SimpleModule
       $dragging = $(@dragging)
       return unless $target
       #when drop event triggered, dragend will be triggered in this scope, and reset all
-      @trigger 'before-dragend',
+      @trigger 'beforedragend',
         dragging: $dragging
         helper: @helper
         placeholder: @placeholder
