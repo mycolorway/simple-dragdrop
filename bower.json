@@ -1,9 +1,9 @@
 {
   "name": "simple-dragdrop",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "homepage": "https://github.com/mycolorway/simple-dragdrop",
   "authors": [
-    "Lcj <emlcj@gmail.com>"
+    "farthinker <farthinker@gmail.com>"
   ],
   "description": "A simple Drag&Drop like component based on Simple Module",
   "main": "lib/dragdrop.js",
