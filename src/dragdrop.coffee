@@ -5,6 +5,7 @@ class Dragdrop extends SimpleModule
     droppable: null
     helper: null
     placeholder: null
+    except: null
     cursor: 'move'
     cursorPosition: 'auto'
     cursorOffset:
@@ -31,7 +32,10 @@ class Dragdrop extends SimpleModule
     @_bind()
 
   _bind: ->
-    @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e)=>
+    @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e) =>
+      return if $.isFunction(@opts.except) && @opts.except(e)
+
+      e.stopPropagation()
       return if @dragging
 
       $target = $(e.currentTarget)
@@ -83,6 +87,7 @@ class Dragdrop extends SimpleModule
         placeholder: @placeholder
 
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
+      e.stopPropagation()
       $target = $(e.currentTarget)
       $dragging = $(@dragging)
       return unless $target
