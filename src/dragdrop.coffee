@@ -31,7 +31,10 @@ class Dragdrop extends SimpleModule
     @_bind()
 
   _bind: ->
-    @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e)=>
+    @el.on 'mousedown.simple-dragdrop', @opts.draggable , (e) =>
+      return if @triggerHandler('beforedragstart', e) == false
+
+      e.stopPropagation()
       return if @dragging
 
       $target = $(e.currentTarget)
@@ -83,6 +86,7 @@ class Dragdrop extends SimpleModule
         placeholder: @placeholder
 
     $(document).one 'mouseup.simple-dragdrop', @opts.droppable, (e) =>
+      e.stopPropagation()
       $target = $(e.currentTarget)
       $dragging = $(@dragging)
       return unless $target
