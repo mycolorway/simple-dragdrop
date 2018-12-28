@@ -1,6 +1,6 @@
 {
   "name": "simple-dragdrop",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "A simple Drag&Drop like component based on Simple Module",
   "main": "lib/dragdrop.js",
   "repository": {
@@ -23,7 +23,7 @@
     "grunt-contrib-jasmine": "0.x",
     "grunt-umd": "2.x"
   },
-  "dependencies": {
+  "peerDependencies": {
     "jquery": "~2.1.4",
     "simple-module": "~2.0.6"
   }
